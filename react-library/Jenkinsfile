@@ -81,7 +81,7 @@ agent any
                 sh '''
                     gcloud container clusters get-credentials amol-gke --region ${REGION} --project ${PROJECT_ID}
                     kubectl config set-context --current --namespace=my-app-namespace
-                    kubectl apply -f k8s/
+                    kubectl apply -f react-library/k8s/
                 '''
             }
         }
