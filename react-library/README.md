@@ -58,4 +58,16 @@ npm -v
 ###TRoubleshooting point #####
 
 rm -rf node_modules package-lock.json
+
 npm cache clean --force
+
+sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/library-react/react-library
+
+
+sudo -u jenkins rm -rf node_modules package-lock.json
+sudo -u jenkins npm cache clean --force
+
+sudo -u jenkins npm install
+
+
+
