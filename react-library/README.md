@@ -69,5 +69,12 @@ sudo -u jenkins npm cache clean --force
 
 sudo -u jenkins npm install
 
+gcloud container clusters get-credentials amol-gke --region us-central1 --project krisha-dev-459506
+
+
+kubectl config set-context --current --namespace=my-app-namespace
+
+my-app-namespac
+
 
 
