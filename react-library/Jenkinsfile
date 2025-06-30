@@ -21,8 +21,10 @@ agent any
         stage('NPM Build') {
             steps {
                 sh '''
-                    ls -lrth
+                  
                     cd react-library
+                    node -v
+                    npm -v
                     echo "Installing Node.js dependencies..."
                     npm install
                     npm run build
