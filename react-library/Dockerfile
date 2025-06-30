@@ -11,9 +11,8 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy only source files and public assets
-COPY public ./public
-COPY src ./src
+
+
 
 # Build the React app
 RUN npm run build
