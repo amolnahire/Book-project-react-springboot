@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_ID = 'krisha-dev-459506'
+        REGION = 'us-central1'
+        REPO_NAME = 'krisha-repo'
+        IMAGE_NAME = 'react-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        ARTIFACT_REGISTRY = "${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('NPM Build') {
+            steps {
+                sh '''
+                    npm install
+                    npm run build
+                '''
+            }
+        }
+
+        stage('Authenticate with GCP') {
+            steps {
+                withCredentials([file(credentialsId: 'gcp-service-account-krisha', variable: 'GCP_KEY_FILE')]) {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
+                        gcloud config set project ${PROJECT_ID}
+                        gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+                    '''
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    docker build -t ${ARTIFACT_REGISTRY}:${IMAGE_TAG} .
+                '''
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh '''
+                    docker push ${ARTIFACT_REGISTRY}:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('Update Deployment YAML with Build Tag') {
+            steps {
+                sh '''
+                    sed -i "s|__IMAGE_TAG__|${IMAGE_TAG}|g" k8s/deployment.yaml
+                '''
+            }
+        }
+
+        stage('Deploy to GKE') {
+            steps {
+                sh '''
+                    gcloud container clusters get-credentials amol-gke --region ${REGION} --project ${PROJECT_ID}
+                    kubectl config set-context --current --namespace=my-app-namespace
+                    kubectl apply -f k8s/
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "✅ Pipeline execution completed with image tag: ${IMAGE_TAG}"
+        }
+    }
+}
