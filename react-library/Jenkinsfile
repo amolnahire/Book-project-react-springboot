@@ -20,6 +20,9 @@ pipeline {
         stage('NPM Build') {
             steps {
                 sh '''
+                    ls -lrth
+                    cd react-library
+                    echo "Installing Node.js dependencies..."
                     npm install
                     npm run build
                 '''
