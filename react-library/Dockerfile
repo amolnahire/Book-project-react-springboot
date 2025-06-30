@@ -1,5 +1,3 @@
-
-
 FROM node:18 AS build
 
 WORKDIR /app
@@ -7,15 +5,15 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-
 # Install dependencies
 RUN npm install
 
-
-
+# Copy all source code (including public and src folders)
+COPY . .
 
 # Build the React app
 RUN npm run build
+
 # Step 2: Serve with Nginx
 FROM nginx:stable-alpine
 
