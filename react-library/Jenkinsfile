@@ -18,19 +18,19 @@ agent any
             }
         }
 
-        stage('NPM Build') {
-            steps {
-                sh '''
+        // stage('NPM Build') {
+        //     steps {
+        //         sh '''
                   
-                    cd react-library
-                    node -v
-                    npm -v
-                    echo "Installing Node.js dependencies..."
-                    npm install
-                    npm run build
-                '''
-            }
-        }
+        //             cd react-library
+        //             node -v
+        //             npm -v
+        //             echo "Installing Node.js dependencies..."
+        //             npm install
+        //             npm run build
+        //         '''
+        //     }
+        // }
 
         stage('Authenticate with GCP') {
             steps {
@@ -65,7 +65,13 @@ agent any
         stage('Update Deployment YAML with Build Tag') {
             steps {
                 sh '''
-                    sed -i "s|__IMAGE_TAG__|${IMAGE_TAG}|g" k8s/deployment.yaml
+                cd react-library/
+                echo "Updating deployment YAML with image tag..."
+                IMAGE_TAG=${IMAGE_TAG}
+                echo "Using image tag: ${IMAGE_TAG}"
+                # Update the deployment.yaml file with the new image tag
+                sed -i "s|image: .*|image: ${ARTIFACT_REGISTRY}:${IMAGE_TAG}|g" k8s/deployment.yaml
+          
                 '''
             }
         }
