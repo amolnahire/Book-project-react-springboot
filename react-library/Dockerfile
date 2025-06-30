@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
 FROM node:18 AS build
 
@@ -34,7 +34,7 @@ EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
-=======
+
 # Use an official Node.js runtime as the base image
 FROM node:16-alpine
 
@@ -56,4 +56,3 @@ EXPOSE 3000
 # Define the command to run the app
 CMD ["npm", "start"]
 
->>>>>>> af9d771f6d7bd8dafc0ee52f47322f5da74edc8b
