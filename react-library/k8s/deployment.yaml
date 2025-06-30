@@ -31,11 +31,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              memory: "250Mi"
-              cpu: "250m"
+              memory: "500Mi"
+              cpu: "500m"
             limits:
-              memory: "250Mi"
-              cpu: "250m"
+              memory: "500Mi"
+              cpu: "500m"
 
 ---
 
@@ -58,10 +58,10 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 90
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 75
+          averageUtilization: 90
