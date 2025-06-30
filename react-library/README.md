@@ -45,3 +45,17 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 git
+
+
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+
+sudo npm install -g npm@11.0.0
+
+node -v
+npm -v
+
+###TRoubleshooting point #####
+
+rm -rf node_modules package-lock.json
+npm cache clean --force
